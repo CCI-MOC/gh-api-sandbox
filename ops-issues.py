@@ -31,12 +31,14 @@ class GitHub:
 @click.command()
 @click.option("--token", "-T", envvar="GITHUB_TOKEN")
 @click.option("--org", "-O", envvar="GITHUB_ORGANIZATION")
-@click.option("--output", "-o", type=click.File(mode="w"), default=sys.stdout)
+@click.option("--output", "-o")
 @click.argument("board")
 def list_issues(token, output, org, board):
     try:
-        with output:
-            writer = csv.writer(output)
+        with (
+            open(output, "w", newline="", encoding="utf-8") if output else sys.stdout
+        ) as fd:
+            writer = csv.writer(fd)
             writer.writerow(
                 [
                     "project",
